@@ -1,0 +1,10 @@
+{
+   "extDescription": {
+      "description": "Extension description.",
+      "message": "Protegge la tua privacy bloccando le minacce on-line."
+   },
+   "extName": {
+      "description": "Extension name.",
+      "message": "Sicurezza browser Avira"
+   }
+}
