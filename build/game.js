@@ -6,8 +6,15 @@ var __extends = (this && this.__extends) || function (d, b) {
 var SimpleGame;
 (function (SimpleGame) {
     var Component = (function () {
-        function Component(game) {
+        function Component(game, x, y, width, height) {
             this.game = game;
+            this.x = x;
+            this.y = y;
+            this.width = width;
+            this.height = height;
+            this.mask = this.game.add.graphics(0, 0);
+            this.mask.beginFill(0xffffff);
+            this.mask.drawRect(x, y, width, height);
         }
         Component.prototype.init = function () { };
         Component.prototype.create = function () { };
@@ -45,37 +52,36 @@ var SimpleGame;
 (function (SimpleGame) {
     var SongSelect = (function (_super) {
         __extends(SongSelect, _super);
-        function SongSelect(game, x, y, width, height) {
-            _super.call(this, game);
-            this.songs = [];
-            this.selectedIndex = 0;
-            this.songRectangles = [];
+        function SongSelect() {
+            _super.apply(this, arguments);
             this.songs = [
                 { artist: 'The Chainsmokers', title: 'Don\'t let me down', length: 208, bpm: 160 },
                 { artist: 'S3RL', title: 'I Will Pick You Up (feat.  Tamika)', length: 208, bpm: 160 },
                 { artist: 'Jeff Williams', title: 'Red Like Roses - Part II (feat. Casey Lee Williams)', length: 242, bpm: 160 },
                 { artist: 'Weebs', title: 'Senpai  this, senpai that, senpai everywhere', length: 208, bpm: 160 },
             ];
+            this.selectedIndex = 0;
+            this.songRectangles = [];
         }
         SongSelect.prototype.create = function () {
             var _this = this;
+            this.objects = this.game.add.group();
+            this.objects.mask = this.mask;
             this.bmd = this.game.add.bitmapData(this.game.world.width, this.game.world.height);
             this.bmd.addToWorld();
-            var initY = 100;
+            var initY = this.y;
             this.songs.forEach(function (song, i) {
-                var rectangleWidth = 400;
+                var rectangleWidth = _this.width;
                 var rectangleHeight = 100;
                 var songObject = {
-                    rectangle: _this.createRectangle(_this.game.world.width - rectangleWidth - 10, initY + 10, rectangleWidth, rectangleHeight),
-                    text: _this.game.add.text(_this.game.world.width - rectangleWidth + 0, initY + 20, song.artist + "  - " + song.title, {
+                    rectangle: _this.objects.add(_this.createRectangle(_this.x, initY + 10, rectangleWidth, rectangleHeight)),
+                    text: _this.objects.add(_this.game.add.text(_this.x + 10, initY + 20, song.artist + "  - " + song.title, {
                         font: 'bold 16px Arial',
-                        fill: '#222',
-                        // wordWrap: true,
-                        // wordWrapWidth: 300,
-                        boundsAlignH: 'left',
-                        boundsAlignW: 'top'
-                    })
+                        fill: '#222'
+                    }))
                 };
+                // songObject.rectangle.mask = this.mask
+                // songObject.text.mask = this.mask
                 // TODO: add mask to rectangles, so it only renders in certain area
                 var mask = _this.game.add.graphics(0, 0);
                 mask.beginFill(0xffffff);
@@ -117,6 +123,10 @@ var SimpleGame;
             sprite.beginFill(Phaser.Color.getRandomColor(100, 200, 1));
             sprite.drawRect(0, 0, width, height);
             return sprite;
+        };
+        SongSelect.prototype.render = function () {
+            this.game.debug.spriteBounds(this.objects, 'red', false);
+            this.game.debug.spriteBounds(this.mask, 'green', false);
         };
         return SongSelect;
     }(SimpleGame.Component));
@@ -167,7 +177,9 @@ var SimpleGame;
                 _super.apply(this, arguments);
             }
             MainMenu.prototype.init = function () {
-                this.songSelect = new SimpleGame.SongSelect(this.game);
+                var songWidth = 400;
+                var songHeight = 100;
+                this.songSelect = new SimpleGame.SongSelect(this.game, this.game.world.width - songWidth - 10, songHeight, songWidth, 430);
             };
             MainMenu.prototype.preload = function () {
                 this.game.load.image('button', 'assets/images/button.png');
@@ -188,6 +200,9 @@ var SimpleGame;
             };
             MainMenu.prototype.update = function () {
                 this.songSelect.update();
+            };
+            MainMenu.prototype.render = function () {
+                this.songSelect.render();
             };
             return MainMenu;
         }(Phaser.State));

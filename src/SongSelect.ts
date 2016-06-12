@@ -15,43 +15,40 @@ module SimpleGame {
 
     export class SongSelect extends SimpleGame.Component {
         bmd: Phaser.BitmapData
-        songs: Array<SongInterface> = []
+        songs: Array<SongInterface> = [
+            {artist: 'The Chainsmokers', title: 'Don\'t let me down', length: 208, bpm: 160},
+            {artist: 'S3RL', title: 'I Will Pick You Up (feat.  Tamika)', length: 208, bpm: 160},
+            {artist: 'Jeff Williams', title: 'Red Like Roses - Part II (feat. Casey Lee Williams)', length: 242, bpm: 160},
+            {artist: 'Weebs', title: 'Senpai  this, senpai that, senpai everywhere', length: 208, bpm: 160},
+            // {artist: 'The', title: 'Do', length: 208, bpm: 160},
+            // {artist: 'The', title: 'Do', length: 208, bpm: 160},
+            // {artist: 'The', title: 'Do', length: 208, bpm: 160},
+        ]
         selectedIndex: number = 0
         songRectangles: Array<SongRectangle> = []
-
-        constructor (game: Phaser.Game, x: number, y: number, width: number, height: number) {
-            super(game)
-
-            this.songs = [
-                {artist: 'The Chainsmokers', title: 'Don\'t let me down', length: 208, bpm: 160},
-                {artist: 'S3RL', title: 'I Will Pick You Up (feat.  Tamika)', length: 208, bpm: 160},
-                {artist: 'Jeff Williams', title: 'Red Like Roses - Part II (feat. Casey Lee Williams)', length: 242, bpm: 160},
-                {artist: 'Weebs', title: 'Senpai  this, senpai that, senpai everywhere', length: 208, bpm: 160},
-                // {artist: 'The', title: 'Do', length: 208, bpm: 160},
-                // {artist: 'The', title: 'Do', length: 208, bpm: 160},
-                // {artist: 'The', title: 'Do', length: 208, bpm: 160},
-            ]
-        }
+        objects: Phaser.Group
 
         create () {
+            this.objects = this.game.add.group()
+            this.objects.mask = this.mask
+
             this.bmd = this.game.add.bitmapData(this.game.world.width, this.game.world.height)
             this.bmd.addToWorld()
 
-            var initY = 100
+            var initY = this.y
             this.songs.forEach((song, i) => {
-                var rectangleWidth = 400
+                var rectangleWidth = this.width
                 var rectangleHeight = 100
                 var songObject = {
-                    rectangle: this.createRectangle(this.game.world.width - rectangleWidth - 10, initY + 10, rectangleWidth, rectangleHeight),
-                    text: this.game.add.text(this.game.world.width - rectangleWidth + 0, initY + 20, `${song.artist}  - ${song.title}`, {
+                    rectangle: this.objects.add(this.createRectangle(this.x, initY + 10, rectangleWidth, rectangleHeight)),
+                    text: this.objects.add(this.game.add.text(this.x + 10, initY + 20, `${song.artist}  - ${song.title}`, {
                         font: 'bold 16px Arial',
-                        fill: '#222',
-                        // wordWrap: true,
-                        // wordWrapWidth: 300,
-                        boundsAlignH: 'left',
-                        boundsAlignW: 'top'
-                    })
+                        fill: '#222'
+                    }))
                 }
+
+                // songObject.rectangle.mask = this.mask
+                // songObject.text.mask = this.mask
 
                 // TODO: add mask to rectangles, so it only renders in certain area
 
@@ -104,6 +101,11 @@ module SimpleGame {
             sprite.beginFill(Phaser.Color.getRandomColor(100, 200, 1))
             sprite.drawRect(0, 0, width, height)
             return sprite
+        }
+
+        render () {
+            this.game.debug.spriteBounds(this.objects, 'red', false)
+            this.game.debug.spriteBounds(this.mask, 'green', false)
         }
     }
 }

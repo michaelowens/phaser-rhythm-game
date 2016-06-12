@@ -6,7 +6,9 @@ module SimpleGame.States {
         buttonText: Phaser.Text
 
         init () {
-            this.songSelect = new SimpleGame.SongSelect(this.game)
+            var songWidth = 400
+            var songHeight = 100
+            this.songSelect = new SimpleGame.SongSelect(this.game, this.game.world.width - songWidth - 10, songHeight, songWidth, 430)
         }
 
         preload () {
@@ -33,6 +35,10 @@ module SimpleGame.States {
 
         update () {
             this.songSelect.update()
+        }
+
+        render () {
+            this.songSelect.render()
         }
     }
 }
