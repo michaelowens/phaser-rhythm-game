@@ -12,7 +12,9 @@ var SimpleGame;
             this.y = y;
             this.width = width;
             this.height = height;
-            this.mask = this.game.add.graphics(x, y);
+            this.objects = this.game.add.group();
+            this.objects.mask = this.mask;
+            this.mask = this.objects.add(this.game.add.graphics(x, y));
             this.mask.beginFill(0xffffff);
             this.mask.drawRect(0, 0, width, height);
             this.maskRectangle = new Phaser.Rectangle(x, y, width, height);
@@ -22,6 +24,7 @@ var SimpleGame;
         Component.prototype.preload = function () { };
         Component.prototype.update = function () { };
         Component.prototype.render = function () {
+            this.game.debug.spriteBounds(this.objects, 'red', false);
             this.game.debug.rectangle(this.maskRectangle, 'green', false);
         };
         return Component;
@@ -69,8 +72,6 @@ var SimpleGame;
         }
         SongSelect.prototype.create = function () {
             var _this = this;
-            this.objects = this.game.add.group();
-            this.objects.mask = this.mask;
             this.bmd = this.game.add.bitmapData(this.game.world.width, this.game.world.height);
             this.bmd.addToWorld();
             var initY = this.y;
@@ -127,11 +128,6 @@ var SimpleGame;
             sprite.beginFill(Phaser.Color.getRandomColor(100, 200, 1));
             sprite.drawRect(0, 0, width, height);
             return sprite;
-        };
-        SongSelect.prototype.render = function () {
-            _super.prototype.render.call(this);
-            this.game.debug.spriteBounds(this.objects, 'red', false);
-            this.game.debug.spriteBounds(this.mask, 'green', false);
         };
         return SongSelect;
     }(SimpleGame.Component));

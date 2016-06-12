@@ -26,12 +26,8 @@ module SimpleGame {
         ]
         selectedIndex: number = 0
         songRectangles: Array<SongRectangle> = []
-        objects: Phaser.Group
 
         create () {
-            this.objects = this.game.add.group()
-            this.objects.mask = this.mask
-
             this.bmd = this.game.add.bitmapData(this.game.world.width, this.game.world.height)
             this.bmd.addToWorld()
 
@@ -101,12 +97,6 @@ module SimpleGame {
             sprite.beginFill(Phaser.Color.getRandomColor(100, 200, 1))
             sprite.drawRect(0, 0, width, height)
             return sprite
-        }
-
-        render () {
-            super.render()
-            this.game.debug.spriteBounds(this.objects, 'red', false)
-            this.game.debug.spriteBounds(this.mask, 'green', false)
         }
     }
 }

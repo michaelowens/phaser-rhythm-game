@@ -16,6 +16,7 @@ module SimpleGame {
         height: number
         mask: Phaser.Graphics
         maskRectangle: Phaser.Rectangle
+        objects: Phaser.Group
 
         constructor (game: Phaser.Game, x: number, y: number, width: number, height: number) {
             this.game = game
@@ -24,8 +25,11 @@ module SimpleGame {
             this.y = y
             this.width = width
             this.height = height
+
+            this.objects = this.game.add.group()
+            this.objects.mask = this.mask
             
-            this.mask = this.game.add.graphics(x, y)
+            this.mask = this.objects.add(this.game.add.graphics(x, y))
             this.mask.beginFill(0xffffff)
             this.mask.drawRect(0, 0, width, height)
 
@@ -37,6 +41,7 @@ module SimpleGame {
         preload () {}
         update () {}
         render() {
+            this.game.debug.spriteBounds(this.objects, 'red', false)
             this.game.debug.rectangle(this.maskRectangle, 'green', false)
         }
     }
