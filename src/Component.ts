@@ -5,6 +5,7 @@ module SimpleGame {
         create()
         preload()
         update()
+        render()
     }
 
     export class Component implements ComponentInterface {
@@ -14,6 +15,7 @@ module SimpleGame {
         width: number
         height: number
         mask: Phaser.Graphics
+        maskRectangle: Phaser.Rectangle
 
         constructor (game: Phaser.Game, x: number, y: number, width: number, height: number) {
             this.game = game
@@ -23,14 +25,19 @@ module SimpleGame {
             this.width = width
             this.height = height
             
-            this.mask = this.game.add.graphics(0, 0)
+            this.mask = this.game.add.graphics(x, y)
             this.mask.beginFill(0xffffff)
-            this.mask.drawRect(x, y, width, height)
+            this.mask.drawRect(0, 0, width, height)
+
+            this.maskRectangle = new Phaser.Rectangle(x, y, width, height)
         }
 
         init () {}
         create () {}
         preload () {}
         update () {}
+        render() {
+            this.game.debug.rectangle(this.maskRectangle, 'green', false)
+        }
     }
 }

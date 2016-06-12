@@ -12,14 +12,18 @@ var SimpleGame;
             this.y = y;
             this.width = width;
             this.height = height;
-            this.mask = this.game.add.graphics(0, 0);
+            this.mask = this.game.add.graphics(x, y);
             this.mask.beginFill(0xffffff);
-            this.mask.drawRect(x, y, width, height);
+            this.mask.drawRect(0, 0, width, height);
+            this.maskRectangle = new Phaser.Rectangle(x, y, width, height);
         }
         Component.prototype.init = function () { };
         Component.prototype.create = function () { };
         Component.prototype.preload = function () { };
         Component.prototype.update = function () { };
+        Component.prototype.render = function () {
+            this.game.debug.rectangle(this.maskRectangle, 'green', false);
+        };
         return Component;
     }());
     SimpleGame.Component = Component;
@@ -125,6 +129,7 @@ var SimpleGame;
             return sprite;
         };
         SongSelect.prototype.render = function () {
+            _super.prototype.render.call(this);
             this.game.debug.spriteBounds(this.objects, 'red', false);
             this.game.debug.spriteBounds(this.mask, 'green', false);
         };

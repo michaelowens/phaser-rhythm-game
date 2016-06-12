@@ -104,6 +104,7 @@ module SimpleGame {
         }
 
         render () {
+            super.render()
             this.game.debug.spriteBounds(this.objects, 'red', false)
             this.game.debug.spriteBounds(this.mask, 'green', false)
         }
