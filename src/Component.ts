@@ -25,13 +25,13 @@ module SimpleGame {
             this.y = y
             this.width = width
             this.height = height
+            
+            this.mask = this.game.add.graphics(x, y)
+            this.mask.beginFill(0xffffff)
+            this.mask.drawRect(0, 0, width, height)
 
             this.objects = this.game.add.group()
             this.objects.mask = this.mask
-            
-            this.mask = this.objects.add(this.game.add.graphics(x, y))
-            this.mask.beginFill(0xffffff)
-            this.mask.drawRect(0, 0, width, height)
 
             this.maskRectangle = new Phaser.Rectangle(x, y, width, height)
         }

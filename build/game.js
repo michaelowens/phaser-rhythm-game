@@ -12,11 +12,11 @@ var SimpleGame;
             this.y = y;
             this.width = width;
             this.height = height;
-            this.objects = this.game.add.group();
-            this.objects.mask = this.mask;
-            this.mask = this.objects.add(this.game.add.graphics(x, y));
+            this.mask = this.game.add.graphics(x, y);
             this.mask.beginFill(0xffffff);
             this.mask.drawRect(0, 0, width, height);
+            this.objects = this.game.add.group();
+            this.objects.mask = this.mask;
             this.maskRectangle = new Phaser.Rectangle(x, y, width, height);
         }
         Component.prototype.init = function () { };
